@@ -7,13 +7,13 @@ from octopoes.models.types import (
 )
 from octopoes.models.ooi.findings import SnykFindingType
 
-from boefjes.kat_snyk.normalize import run
-from config import settings
-from job import NormalizerMeta
+from boefjes.plugins.kat_snyk.normalize import run
+from boefjes.config import settings
+from boefjes.job import NormalizerMeta
 
 
 def get_dummy_data(filename: str) -> bytes:
-    path = settings.base_dir / "tests" / "examples" / filename
+    path = settings.base_dir / ".." / "tests" / "examples" / filename
     return path.read_bytes()
 
 

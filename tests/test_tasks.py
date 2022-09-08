@@ -1,16 +1,18 @@
+from pathlib import Path
+
+import sys
 from typing import List
 from unittest import TestCase, mock
 
-from octopoes.models import Reference
 from octopoes.models.ooi.network import Network
 
-from job import BoefjeMeta
-from job_handler import handle_boefje_job
-from katalogus.models import Boefje, Normalizer, Bit, PluginType
-from runner import LocalBoefjeJobRunner
-from tasks import normalizers_for_meta, handle_boefje
+from boefjes.job import BoefjeMeta
+from boefjes.job_handler import handle_boefje_job
+from boefjes.katalogus.models import Boefje, Normalizer, Bit, PluginType
+from boefjes.runner import LocalBoefjeJobRunner
+from boefjes.tasks import normalizers_for_meta
 
-import boefjes.models
+import boefjes.plugins.models
 
 
 class TaskTest(TestCase):
@@ -72,6 +74,7 @@ class TaskTest(TestCase):
             ),
         ]
         self.plugins: List[PluginType] = self.boefjes + self.normalizers + self.bits
+        sys.path.append(str(Path(__file__).parent))
 
     def test_all_normalizers_match_some_boefje_mime_type(self):
         self.assertListEqual(
@@ -95,10 +98,10 @@ class TaskTest(TestCase):
             organization="_dev",
         ).copy()
 
-    @mock.patch("job_handler.bytes_api_client")
+    @mock.patch("boefjes.runner.get_environment_settings", return_value={})
+    @mock.patch("boefjes.job_handler.bytes_api_client")
     def test_handle_boefje_with_exception(
-        self,
-        mock_bytes_api_client,
+        self, mock_bytes_api_client, mock_get_environment_settings
     ):
         meta = BoefjeMeta(
             id="some-random-job-id",
@@ -107,7 +110,7 @@ class TaskTest(TestCase):
             arguments={},
             organization="_dev",
         )
-        boefje = boefjes.models.Boefje(
+        boefje = boefjes.plugins.models.Boefje(
             id="dummy-with-exception",
             repository_id="",
             name="dummy",
@@ -119,9 +122,16 @@ class TaskTest(TestCase):
             dispatches={},
         )
 
-        handle_boefje_job(meta, LocalBoefjeJobRunner(meta, boefje, "tests"))
+        handle_boefje_job(meta, LocalBoefjeJobRunner(meta, boefje, {}))
 
         mock_bytes_api_client.save_boefje_meta.assert_called_once_with(meta)
         mock_bytes_api_client.save_raw.assert_called_once_with(
-            "some-random-job-id", "dummy error", {"error/boefje"}
+            "some-random-job-id",
+            "dummy error",
+            {
+                "error/boefje",
+                "dummy-with-exception",
+                "boefje/dummy-with-exception",
+                f"boefje/dummy-with-exception-{meta.parameterized_arguments_hash}",
+            },
         )

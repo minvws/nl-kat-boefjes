@@ -28,7 +28,7 @@ ${APP_DIR}/venv/bin/pip install --upgrade pip > /dev/null
 # TODO: remove this when octopoes is publicly available
 sed -i '/octopoes/d' ${APP_DIR}/app/requirements.txt
 find ${APP_DIR}/app -name requirements.txt | xargs -L1 sed -i '/octopoes/d'
-${APP_DIR}/venv/bin/pip install ${APP_DIR}/nl-kat-octopoes > /dev/null
+${APP_DIR}/venv/bin/pip install ${APP_DIR}/nl-rt-tim-abang-octopoes > /dev/null
 
 ${APP_DIR}/venv/bin/pip install --requirement ${APP_DIR}/app/requirements.txt > /dev/null
 find ${APP_DIR}/app -name requirements.txt | xargs -I{} ${APP_DIR}/venv/bin/pip install -r {} > /dev/null

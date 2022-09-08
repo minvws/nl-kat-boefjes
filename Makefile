@@ -31,7 +31,7 @@ help: ## Show this help.
 build: migrate seed
 
 seed:  # Seed the katalogus database
-	-docker-compose run katalogus python -m seed
+	-docker-compose run katalogus python -m boefjes.seed
 
 ##
 ##|------------------------------------------------------------------------|
@@ -67,5 +67,5 @@ test: itest ## Run all tests.
 
 itest: ## Run the integration tests.
 	$(ci-docker-compose) build
-	$(ci-docker-compose) down
-	$(ci-docker-compose) run --rm katalogus_integration; $(ci-docker-compose) down
+	$(ci-docker-compose) down --remove-orphans
+	$(ci-docker-compose) run --rm katalogus_integration
