@@ -1,7 +1,7 @@
 import logging
 import typing
 from functools import wraps
-from typing import Callable, Dict, Union, Any, Set
+from typing import Callable, Dict, Optional, Union, Any, Set
 
 import requests
 from requests.models import HTTPError
@@ -111,7 +111,7 @@ class BytesAPIClient:
 
     @retry_with_login
     def save_raw(
-        self, boefje_meta_id: str, raw: bytes, mime_types: Union[Set[str] , None] = None
+        self, boefje_meta_id: str, raw: bytes, mime_types: Optional[Set[str]] = None
     ) -> None:
         if not mime_types:
             mime_types = set()
