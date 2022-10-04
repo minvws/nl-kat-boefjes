@@ -111,7 +111,7 @@ class BytesAPIClient:
 
     @retry_with_login
     def save_raw(
-        self, boefje_meta_id: str, raw: bytes, mime_types: Set[str] = None
+        self, boefje_meta_id: str, raw: bytes, mime_types: Union[Set[str] , None] = None
     ) -> None:
         if not mime_types:
             mime_types = set()
