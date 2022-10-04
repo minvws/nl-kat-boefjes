@@ -4,6 +4,7 @@ import requests
 from pydantic import BaseModel, parse_obj_as
 
 from boefjes.job import BoefjeMeta, NormalizerMeta
+from abc import ABC, abstractmethod
 
 
 class Queue(BaseModel):
@@ -16,12 +17,14 @@ class Task(BaseModel):
     item: Union[BoefjeMeta, NormalizerMeta]
 
 
-class SchedulerClientInterface:
+class SchedulerClientInterface(ABC):
+    @abstractmethod
     def get_queues(self) -> List[Queue]:
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def pop_task(self, queue: str) -> Optional[Task]:
-        raise NotImplementedError()
+        pass
 
 
 class SchedulerAPIClient(SchedulerClientInterface):
