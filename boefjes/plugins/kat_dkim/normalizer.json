@@ -1,0 +1,9 @@
+{
+    "id": "kat_dkim_normalize",
+    "consumes": [
+        "dkim"
+    ],
+    "produces": [
+        "DKIMKey"
+    ]
+}

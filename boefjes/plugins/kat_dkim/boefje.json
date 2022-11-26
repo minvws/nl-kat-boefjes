@@ -1,0 +1,13 @@
+{
+    "id": "dkim",
+    "name": "DKIM",
+    "description": "Check the domain for a DKIM key when the selector is known.",
+    "consumes": [
+        "DKIMSelector"
+    ],
+    "produces": [
+        "DKIMKey"
+    ],
+    "environment_keys": [],
+    "scan_level": 1
+}
