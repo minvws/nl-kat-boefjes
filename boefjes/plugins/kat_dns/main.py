@@ -4,6 +4,7 @@ import logging
 from typing import Union, Tuple
 
 import dns.resolver
+import dns.rcode
 from dns.name import Name
 from dns.resolver import Answer
 
@@ -39,6 +40,7 @@ def run(boefje_meta: BoefjeMeta) -> Tuple[BoefjeMeta, Union[bytes, str]]:
             return boefje_meta, "NXDOMAIN"
         except dns.resolver.Timeout:
             pass
+    
 
     answers_formatted = [
         f"RESOLVER: {answer.nameserver}\n{answer.response}" for answer in answers
@@ -68,11 +70,12 @@ def get_parent_zone_soa(name: Name) -> Answer:
 
 def get_email_security_records(hostname: str, record_subdomain: str) -> str:
     try:
-        answer = dns.resolver.resolve(f"{record_subdomain}.{hostname}", "TXT")
-        return answer.response.to_text()
+        answer = dns.resolver.resolve(f"{record_subdomain}.{hostname}", "TXT", raise_on_no_answer=False)
+        if answer.response.rcode() == dns.rcode.NOERROR:
+            return "NOERROR"
+        else:
+            return answer.response.to_text()
     except dns.resolver.NXDOMAIN:
         return "NXDOMAIN"
-    except dns.resolver.NoAnswer:
-        return "NoAnswer"
     except dns.resolver.Timeout:
         return "Timeout"
