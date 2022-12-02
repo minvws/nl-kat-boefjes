@@ -1,0 +1,15 @@
+    {
+        "id": "nikto",
+        "name": "nikto",
+        "description": "Scan webserver using Nikto",
+        "consumes": [
+            "Website"
+        ],
+        "produces": [
+            "Software",
+            "HTTPHeader",
+            "HostnameHTTPURL",
+            "Finding"
+        ],
+        "scan_level": 3
+    }
