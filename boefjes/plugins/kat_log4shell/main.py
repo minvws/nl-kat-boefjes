@@ -16,7 +16,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 logging.basicConfig(level=logging.INFO)
 
 TIMEOUT = 15
-REPLY_FQDN = getenv("REPLY_FQDN", "invalid")  # "cve.stillekat.nl"
 
 
 def run(boefje_meta: BoefjeMeta) -> Tuple[BoefjeMeta, Union[bytes, str]]:
@@ -27,9 +26,9 @@ def run(boefje_meta: BoefjeMeta) -> Tuple[BoefjeMeta, Union[bytes, str]]:
 
     schemes = ["http", "https"]
 
-    reply_fqdn = REPLY_FQDN.lower()
+    reply_fqdn = getenv("REPLY_FQDN", "invalid").lower()
     if not (reply_fqdn == "localhost" or validators.domain(reply_fqdn)):
-        raise ValueError(f"{REPLY_FQDN} is not a valid fully qualified domain name")
+        raise ValueError(f'"{reply_fqdn}" is not a valid fully qualified domain name')
 
     output = {}
     for scheme in schemes:
