@@ -19,7 +19,7 @@ from boefjes.job_models import NormalizerMeta
 
 def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI]:
     results = json.loads(raw)
-    boefje_meta = normalizer_meta.boefje_meta
+    boefje_meta = normalizer_meta.raw_data.boefje_meta
 
     pk_ooi = Reference.from_str(boefje_meta.input_ooi)
     input_ = boefje_meta.arguments["input"]["software"]

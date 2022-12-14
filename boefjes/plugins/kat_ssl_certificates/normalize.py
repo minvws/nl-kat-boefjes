@@ -32,7 +32,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
     if not contents:
         return
 
-    input_ooi = normalizer_meta.boefje_meta.input_ooi
+    input_ooi = normalizer_meta.raw_data.boefje_meta.input_ooi
 
     # extract all certificates
     certificates, certificate_subject_alternative_names, hostnames = read_certificates(

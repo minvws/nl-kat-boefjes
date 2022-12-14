@@ -1,5 +1,5 @@
 import json
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 import requests
 from bs4 import BeautifulSoup
@@ -8,7 +8,7 @@ from boefjes.plugins.kat_snyk import check_version
 from boefjes.job_models import BoefjeMeta
 
 
-def run(boefje_meta: BoefjeMeta) -> Tuple[BoefjeMeta, Union[bytes, str]]:
+def run(boefje_meta: BoefjeMeta) -> List[Tuple[set, Union[bytes, str]]]:
     input_ = boefje_meta.arguments["input"]["software"]
     software_name = input_["name"]
     software_version = input_["version"]
@@ -79,4 +79,4 @@ def run(boefje_meta: BoefjeMeta) -> Tuple[BoefjeMeta, Union[bytes, str]]:
                     }
                 )
 
-    return boefje_meta, json.dumps(result)
+    return [(set(), json.dumps(result))]
