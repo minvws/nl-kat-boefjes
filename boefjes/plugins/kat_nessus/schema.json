@@ -1,0 +1,22 @@
+{
+  "title": "Arguments",
+  "type": "object",
+  "properties": {
+    "NESSUS_SECRETKEY": {
+      "title": "NESSUS_SECRETKEY",
+      "maxLength": 128,
+      "type": "string",
+      "description": "A NESSUS_SECRETKEY API key (see https://community.tenable.com/s/article/An-introduction-to-the-Nessus-API-generating-session-tokens-and-API-keys)."
+    }, 
+    "NESSUS_ACCESSKEY": {
+      "title": "NESSUS_ACCESSKEY",
+      "maxLength": 128,
+      "type": "string",
+      "description": "A NESSUS_ACCESSKEY API key (see https://community.tenable.com/s/article/An-introduction-to-the-Nessus-API-generating-session-tokens-and-API-keys)."
+    }
+
+  },
+  "required": [
+    "NESSUS_SECRETKEY", "NESSUS_ACCESSKEY"
+  ]
+}

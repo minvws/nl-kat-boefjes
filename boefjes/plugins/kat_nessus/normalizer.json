@@ -1,0 +1,10 @@
+{
+    "id": "kat_nessus_normalize",
+    "consumes": [
+        "boefje_nessus"
+    ],
+    "produces": [
+        "CVEFindingType",
+        "NessusFindingType"
+    ]
+}

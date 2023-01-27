@@ -1,0 +1,17 @@
+    {
+        "id": "boefje_nessus",
+        "name": "boefje_nessus",
+        "description": "Nessus is an open-source network vulnerability scanner that uses the Common Vulnerabilities and Exposures architecture for easy cross-linking between compliant security tools. KAT currently uses Nessus to import the nessus scans into Octopoes.",
+        "consumes": [
+            "IPAddressV4",
+            "IPAddressV6",
+            "Network",
+            "Dochteronderneming"
+        ],
+        "produces": [
+            "CVEFindingType",
+            "NessusFindingType"
+        ],
+        "environment_keys": ["NESSUS_SECRETKEY", "NESSUS_ACCESSKEY"],
+        "scan_level": 1
+    }
