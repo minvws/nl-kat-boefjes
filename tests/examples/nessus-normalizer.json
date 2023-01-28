@@ -1,0 +1,34 @@
+{
+    "id": "nessus-job",
+    "raw_data": {
+      "id": "",
+      "boefje_meta": {
+        "id": "nessus-job",
+        "boefje": {
+          "id": "nessus",
+          "version": null
+        },
+        "organization": "_dev",
+        "input_ooi": "IPAddressV4|network-NS|192.168.178.101",
+        "arguments": {
+
+          },
+        "dispatches": [
+          {
+            "id": "kat_nessus_normalize",
+            "version": null
+          }
+        ]
+      },
+      "mime_types": [
+        {
+          "value": "boefje/dns-records"
+        }
+      ]
+    },
+    "normalizer": {
+      "id": "kat_nessus.normalize",
+      "version": null
+    }
+}
+  

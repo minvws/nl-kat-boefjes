@@ -1,0 +1,18 @@
+{
+    "id": "nessus-job",
+    "boefje": {
+      "id": "nessus",
+      "version": null
+    },
+    "organization": "_dev",
+    "input_ooi": "IPAddressV4|network-NS|192.168.178.101",
+    "arguments": {
+      "pk": "IPAddressV4|network-NS|192.168.178.101"
+    },
+    "dispatches": [
+      {
+        "id": "kat_nessus_normalize",
+        "version": null
+      }
+    ]
+  }
