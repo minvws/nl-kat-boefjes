@@ -5,7 +5,6 @@ import csv
 from octopoes.models import OOI, Reference
 from octopoes.models.ooi.findings import CVEFindingType, Finding, NessusFindingType
 from octopoes.models.ooi.network import IPPort, Protocol, IPAddressV4, Network
-from octopoes.models.ooi.organization import Dochteronderneming
 
 from boefjes.job_models import NormalizerMeta
 
@@ -18,13 +17,10 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
 
     ipRef = Reference.from_str(normalizer_meta.raw_data.boefje_meta.input_ooi)
 
-    dochterOndernemingName = ipRef.tokenized.network.dochter_onderneming.__root__.get("name")
     networkName = ipRef.tokenized.network.__root__.get("name")
 
-    dochterondernemingObject = Dochteronderneming(name=dochterOndernemingName)
-    networkObject = Network(name=networkName, dochter_onderneming=dochterondernemingObject.reference)
+    networkObject = Network(name=networkName)
 
-    yield dochterondernemingObject
     yield networkObject
 
     for i in csvIterator:
