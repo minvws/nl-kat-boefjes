@@ -25,7 +25,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
 
     for i in csvIterator:
         cve = i[columnDict["CVE"]]
-        if cve: #When the column has a cve get that as findingtype to have a more unified standard with other scanners, else make a nessus findingtype
+        if cve: #When the column has a cve, use  that as findingtype to have a more unified standard with other scanners, else make a nessus findingtype
             findingType = CVEFindingType(id=cve)
         else:
             pluginId = i[columnDict["Plugin ID"]]
@@ -51,7 +51,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
             yield ip_port
 
 
-        if ip_port is None: #if the Nessus scanner found a port associated with this vulnerability add as a reference else use the IP-adres as reference
+        if ip_port is None: #if the Nessus scanner found a port associated with this vulnerability add as a reference else use the IP-adres as a reference
             finding = Finding(finding_type=findingType.reference, ooi=ipAdr.reference)
 
         else:
