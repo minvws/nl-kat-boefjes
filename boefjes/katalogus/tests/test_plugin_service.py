@@ -86,7 +86,7 @@ def get_plugin_seed():
 
 
 def mock_plugin_service(organisation_id: str) -> PluginService:
-    storage = SettingsStorageMemory("test")
+    storage = SettingsStorageMemory()
     storage.create("DUMMY_VAR", "123", "test", "test_plugin")
 
     repo_store = RepositoryStorageMemory(organisation_id)
@@ -125,7 +125,7 @@ class TestPluginsService(TestCase):
         self.assertEqual("kat_test", kat_test.id)
         self.assertEqual("Kat test name", kat_test.name)
         self.assertEqual({"DNSZone"}, kat_test.consumes)
-        self.assertSetEqual({"Hostname", "Certificate"}, set(kat_test.produces))
+        self.assertSetEqual({"Hostname", "X509Certificate"}, set(kat_test.produces))
 
         kat_test_norm = list(filter(lambda x: x.id == "kat_test_normalize", plugins)).pop()
         self.assertIn("kat_test_normalize", kat_test_norm.id)
@@ -206,3 +206,73 @@ class TestPluginsService(TestCase):
 
         plugin = self.service.by_plugin_id(plugin_id, self.organisation)
         self.assertFalse(plugin.enabled)
+
+    def test_adding_integer_settings_with_faulty_value_given_constraints(self):
+        plugin_id = "kat_test_2"
+
+        self.service.settings_storage.update_by_key("api_key", "24", self.organisation, plugin_id)
+
+        with self.assertRaises(SettingsNotConformingToSchema) as ctx:
+            self.service.update_by_id("test-repo-2", plugin_id, self.organisation, True)
+
+        self.assertIn("'24' is not of type 'integer'", ctx.exception.message)
+
+        self.service.settings_storage.update_by_key("api_key", 24, self.organisation, plugin_id)  # Will become a string
+
+        with self.assertRaises(SettingsNotConformingToSchema) as ctx:
+            self.service.update_by_id("test-repo-2", plugin_id, self.organisation, True)
+
+        self.assertIn("'24' is not of type 'integer'", ctx.exception.message)
+
+        plugin = self.service.by_plugin_id(plugin_id, self.organisation)
+        self.assertFalse(plugin.enabled)
+
+    def test_clone_one_setting(self):
+        new_org_id = "org2"
+
+        plugin_id = "kat_test"
+        self.service.create_setting("api_key", "24", self.organisation, plugin_id)
+        assert self.service.get_setting_by_key("api_key", self.organisation, plugin_id) == "24"
+
+        self.service.update_by_id(LocalPluginRepository.RESERVED_ID, plugin_id, self.organisation, True)
+
+        self.service.update_by_id(LocalPluginRepository.RESERVED_ID, "test-boefje-1", new_org_id, True)
+        self.service.update_by_id(LocalPluginRepository.RESERVED_ID, "test-boefje-2", new_org_id, True)
+
+        with self.assertRaises(KeyError):
+            self.service.get_setting_by_key("api_key", new_org_id, plugin_id)
+
+        new_org_plugins = self.service.get_all(new_org_id)
+        assert len(new_org_plugins) == 8
+        assert len([x for x in new_org_plugins if x.enabled]) == 6  # 4 Normalizers plus two boefjes enabled above
+        assert plugin_id not in [x.id for x in new_org_plugins if x.enabled]
+        assert "test-boefje-1" in [x.id for x in new_org_plugins if x.enabled]
+
+        self.service.clone_settings_to_organisation(self.organisation, new_org_id)
+
+        assert self.service.get_setting_by_key("api_key", self.organisation, plugin_id) == "24"
+        assert self.service.get_setting_by_key("api_key", new_org_id, plugin_id) == "24"
+
+        new_org_plugins = self.service.get_all(new_org_id)
+        assert len(new_org_plugins) == 8
+        assert len([x for x in new_org_plugins if x.enabled]) == 5
+        assert plugin_id in [x.id for x in new_org_plugins if x.enabled]
+        assert "test-boefje-1" not in [x.id for x in new_org_plugins if x.enabled]
+
+    def test_clone_many_settings(self):
+        plugin_ids = ["test-boefje-1", "test-boefje-2"] * 4
+        all_settings = {str(x): str(x + 1) for x in range(8)}
+
+        for plugin_id, (key, value) in zip(plugin_ids, all_settings.items()):
+            self.service.create_setting(key, value, self.organisation, plugin_id)
+
+        self.service.clone_settings_to_organisation(self.organisation, "org2")
+
+        all_settings_for_new_org = self.service.get_all_settings("org2", "test-boefje-1")
+        assert len(all_settings_for_new_org) == 4
+        assert all_settings_for_new_org == {
+            "0": "1",
+            "2": "3",
+            "4": "5",
+            "6": "7",
+        }
