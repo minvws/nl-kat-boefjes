@@ -30,7 +30,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
     tcpprotocol = Protocol.TCP
 
     # TODO use timestamp for sample to setup new OOI's
-    # timestamp = parser.getElementsByTagName('issues').attributes['exportTime'].value
+    #  with parser.getElementsByTagName('issues').attributes['exportTime'].value
 
     for issue in parser.getElementsByTagName("issue"):
 
@@ -113,7 +113,8 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
             else:
                 response = response.firstChild.nodeValue.decode()
 
-            # currently we only support websites with hostnames as netloc, therefore we should only add these headers if the resource exists
+            # currently we only support websites with hostnames as netloc, therefore we should only
+            # add these headers if the resource exists
             if http_resource is not None:
                 headers = response.split("\r\n\r\n")[0].split("\n\n")[0]
                 for header in headers.splitlines():
