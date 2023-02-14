@@ -7,7 +7,7 @@ import base64
 from typing import Iterator, Union
 
 from octopoes.models import OOI, Reference
-from octopoes.models.ooi.findings import Finding, CWEFindingType, CAPECFindingType
+from octopoes.models.ooi.findings import Finding, CWEFindingType, CAPECFindingType, CVEFindingType
 from octopoes.models.ooi.dns.zone import Hostname
 from octopoes.models.ooi.network import IPAddressV4, IPAddressV6, Network, IPPort, Protocol
 from octopoes.models.ooi.web import WebScheme, Website, IPAddressHTTPURL, HostnameHTTPURL, URL, HTTPResource, HTTPHeader
@@ -97,6 +97,8 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
                     finding_type = CWEFindingType(id=description[0])
                 elif description[0].startswith("CAPEC"):
                     finding_type = CAPECFindingType(id=description[0])
+                elif description[0].startswith("CVE"):
+                    finding_type = CVEFindingType(id=description[0])
                 else:
                     continue
                 yield finding_type
