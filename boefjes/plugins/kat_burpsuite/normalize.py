@@ -27,7 +27,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
         network = Network(name="internet")
         yield network
 
-    tcpprotocol = Protocol.TCP
+    tcp_protocol = Protocol.TCP
 
     # TODO use timestamp for sample to setup new OOI's
     #  with parser.getElementsByTagName('issues').attributes['exportTime'].value
@@ -58,7 +58,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
         elif isinstance(address, IPv6Address):
             ip = IPAddressV6(address=address, network=network.reference)
 
-        ip_port = IPPort(address=ip.reference, protocol=tcpprotocol, port=port)
+        ip_port = IPPort(address=ip.reference, protocol=tcp_protocol, port=port)
         yield ip_port
 
         service = Service(name=url.scheme)
@@ -118,8 +118,7 @@ def run(normalizer_meta: NormalizerMeta, raw: Union[bytes, str]) -> Iterator[OOI
             if http_resource is not None:
                 headers = response.split("\r\n\r\n")[0].split("\n\n")[0]
                 for header in headers.splitlines():
-                    header = header.split(":")
+                    header = header.split(":", 2)
                     # remove headers wihout key value structure
                     if len(header) == 2:
                         yield HTTPHeader(resource=http_resource.reference, key=header[0], value=header[1])
-                        pass
