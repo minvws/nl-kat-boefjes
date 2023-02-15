@@ -1,0 +1,14 @@
+{
+    "id": "dadb",
+    "name": "DADB",
+    "description": "Fetch hostnames and ipaddresses from DADB",
+    "consumes": [
+        "Network"
+    ],
+    "produces": [
+        "Hostname",
+        "IPAddressV4"
+    ],
+    "environment_keys": ["DADB_API", "DADB_ACCESS_TOKEN"],
+    "scan_level": 2
+}
