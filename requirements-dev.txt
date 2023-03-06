@@ -14,5 +14,5 @@ sqlalchemy==1.4.44
 
 # Dev dependencies
 pre-commit==2.20.0
-pytest==7.2.0
+pytest==7.2.2
 black==22.10.0
