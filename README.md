@@ -1,3 +1,7 @@
+**This repository has been archived because all repositories of the individual
+OpenKAT modules have been merged in the main OpenKAT repository at
+https://github.com/minvws/nl-kat-coordination**
+
 # Boefjes
 
 This module has several entry points discussed below, but let us first consider the prerequisites and scope.
