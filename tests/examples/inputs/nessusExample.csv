@@ -1,0 +1,53 @@
+Plugin ID,CVE,CVSS v2.0 Base Score,Risk,Host,Protocol,Port,Name,Synopsis,Description,Solution,See Also,Plugin Output
+10028,,,None,10.0.2.7,udp,53,DNS Server BIND version Directive Remote Version Detection,It is possible to obtain the version number of the remote DNS server.,"The remote host is running BIND or another DNS server that reports its
+version number when it receives a special request for the text
+'version.bind' in the domain 'chaos'. 
+
+This version is not necessarily accurate and could even be forged, as
+some DNS servers send the information based on a configuration file.","It is possible to hide the version number of BIND by using the
+'version' directive in the 'options' section in named.conf.",,"
+  Version : 9.4.2
+"
+10092,,,None,10.0.2.7,tcp,21,FTP Server Detection,An FTP server is listening on a remote port.,"It is possible to obtain the banner of the remote FTP server by
+connecting to a remote port.",n/a,,"
+The remote FTP banner is :
+
+220 (vsFTPd 2.3.4)
+"
+"
+10107",,,None,10.0.2.7,tcp,80,HTTP Server Type and Version,A web server is running on the remote host.,"This plugin attempts to determine the type and the version of the
+  remote web server.",n/a,,"The remote web server type is :
+
+Apache/2.2.8 (Ubuntu) DAV/2"
+10114,CVE-1999-0524,0,None,10.0.2.7,icmp,0,ICMP Timestamp Request Remote Date Disclosure,It is possible to determine the exact time set on the remote host.,"The remote host answers to an ICMP timestamp request.  This allows an
+attacker to know the date that is set on the targeted machine, which
+may assist an unauthenticated, remote attacker in defeating time-based
+authentication protocols.
+
+Timestamps returned from machines running Windows Vista / 7 / 2008 /
+2008 R2 are deliberately incorrect, but usually within 1000 seconds of
+the actual system time.","Filter out the ICMP timestamp requests (13), and the outgoing ICMP
+timestamp replies (14).",,"The remote clock is synchronized with the local clock.
+"
+10203,CVE-1999-0618,10,Critical,10.0.2.7,tcp,512,rexecd Service Detection,The rexecd service is running on the remote host.,"The rexecd service is running on the remote host. This service is
+design to allow users of a network to execute commands remotely.
+However, rexecd does not provide any good means of authentication, so
+it may be abused by an attacker to scan a third-party host.","Comment out the 'exec' line in /etc/inetd.conf and restart the inetd
+process.",,
+10205,CVE-1999-0651,7.5,High,10.0.2.7,tcp,513,rlogin Service Detection,The rlogin service is running on the remote host.,"The rlogin service is running on the remote host. This service is
+vulnerable since data is passed between the rlogin client and server
+in cleartext. A man-in-the-middle attacker can exploit this to sniff
+logins and passwords. Also, it may allow poorly authenticated logins
+without passwords. If the host is vulnerable to TCP sequence number
+guessing (from any network) or IP spoofing (including ARP hijacking on
+a local network) then it may be possible to bypass authentication.
+Finally, rlogin is an easy way to turn file-write access into full
+logins through the .rhosts or rhosts.equiv files.","Comment out the 'login' line in /etc/inetd.conf and restart the inetd
+process. Alternatively, disable this service and use SSH instead.",,
+10267,,,None,10.0.2.7,tcp,22,SSH Server Type and Version Information,An SSH server is listening on this port.,"It is possible to obtain information about the remote SSH server by
+sending an empty authentication request.",n/a,,"
+SSH version : SSH-2.0-OpenSSH_4.7p1 Debian-8ubuntu1
+SSH supported authentication : publickey,password
+
+
+"
